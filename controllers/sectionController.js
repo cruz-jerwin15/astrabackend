@@ -23,12 +23,13 @@ exports.getSectionById = async (req, res) => {
 
 exports.createSection = async (req, res) => {
   try {
-    const { section_name } = req.body;
+    const { section_name,course_id } = req.body;
 
     // Ensure section_name is unique
-    const [existing] = await Section.getByName(section_name);
+    const [existing] = await Section.getByName(section_name,course_id);
+    console.log(existing)
     if (existing.length > 0) {
-      return res.status(409).json({ message: 'Section name already exists' });
+      return res.status(409).json({ message: 'Section name already exists in the course' });
     }
 
     const [result] = await Section.create(req.body);
@@ -40,11 +41,12 @@ exports.createSection = async (req, res) => {
 
 exports.updateSection = async (req, res) => {
   try {
-    const { section_name } = req.body;
+    const { section_name, course_id } = req.body;
 
-    const [existing] = await Section.getByName(section_name);
+    // Check for duplicates in the same course (excluding the current record)
+    const [existing] = await Section.getByName(section_name, course_id);
     if (existing.length > 0 && existing[0].id != req.params.id) {
-      return res.status(409).json({ message: 'Section name already exists' });
+      return res.status(409).json({ message: 'Section name already exists in this course' });
     }
 
     const [section] = await Section.getById(req.params.id);

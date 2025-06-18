@@ -2,11 +2,25 @@ const db = require('../config/db');
 
 const Course = {
   getAll: () => {
-    return db.query('SELECT * FROM tbl_courses');
+    return db.query(`
+      SELECT 
+        c.*, 
+        d.department_name 
+      FROM tbl_courses c 
+      JOIN tbl_departments d ON c.department_id = d.id
+      ORDER BY c.date_updated DESC
+    `);
   },
-
+  
   getById: (id) => {
-    return db.query('SELECT * FROM tbl_courses WHERE id = ?', [id]);
+    return db.query(`
+      SELECT 
+        c.*, 
+        d.department_name 
+      FROM tbl_courses c 
+      JOIN tbl_departments d ON c.department_id = d.id 
+      WHERE c.id = ?
+    `, [id]);
   },
 
   getByNameAndDepartment: (course_name, department_id) => {

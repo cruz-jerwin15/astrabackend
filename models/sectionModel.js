@@ -1,11 +1,31 @@
 const db = require('../config/db');
 
 const Section = {
-  getAll: () => db.query('SELECT * FROM tbl_sections'),
+  getAll: () => {
+    return db.query(`
+      SELECT 
+        s.*, 
+        c.course_name, 
+        c.description AS course_description 
+      FROM tbl_sections s
+      JOIN tbl_courses c ON s.course_id = c.id
+      ORDER BY date_updated DESC
+    `);
+  },
+  
+  getById: (id) => {
+    return db.query(`
+      SELECT 
+        s.*, 
+        c.course_name, 
+        c.description AS course_description 
+      FROM tbl_sections s
+      JOIN tbl_courses c ON s.course_id = c.id
+      WHERE s.id = ?
+    `, [id]);
+  },
 
-  getById: (id) => db.query('SELECT * FROM tbl_sections WHERE id = ?', [id]),
-
-  getByName: (section_name) => db.query('SELECT * FROM tbl_sections WHERE section_name = ?', [section_name]),
+  getByName: (section_name, course_id) => db.query('SELECT * FROM tbl_sections WHERE section_name = ? AND course_id = ?', [section_name,course_id]),
 
   create: (data) => {
     const { course_id, section_name,status } = data;
