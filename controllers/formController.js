@@ -40,6 +40,16 @@ const FormController = {
       res.status(500).json({ error: err.message });
     }
   },
+ // Get published
+ getPublished: async (req, res) => {
+  try {
+    const forms = await FormModel.getPublished();
+    res.json(forms);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error retrieving published forms.' });
+  }
+},
 
   getFormByKey: async (req, res) => {
     try {

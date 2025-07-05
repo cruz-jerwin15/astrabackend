@@ -24,6 +24,15 @@ getByTitle: async (form_title) => {
     const [rows] = await db.execute('SELECT * FROM tbl_forms WHERE id = ?', [id]);
     return rows[0];
   },
+  getPublished: async () => {
+    const [rows] = await db.execute(
+      'SELECT * FROM tbl_forms WHERE status = ?',
+      ['PUBLISHED']
+    );
+    console.log(rows)
+    return rows[0];
+  },
+ 
   getByKey: async (id) => {
     const [rows] = await db.execute('SELECT * FROM tbl_forms WHERE form_key = ?', [id]);
     return rows[0];
