@@ -14,6 +14,8 @@ const optionRoutes = require('./routes/optionRoutes');
 const healthRoutes = require('./routes/healthRoutes');
 const responseRoutes = require('./routes/responseRoutes');
 const timeRoutes = require('./routes/timeRoutes');
+const healthResponseRoutes = require('./routes/healthResponseRoutes');
+const roomLogRoutes = require("./routes/roomLogRoutes");
 
 
 app.use(cors()); // Allow all origins (dev)
@@ -31,6 +33,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/healths', healthRoutes);
 app.use('/api/responses', responseRoutes);
 app.use('/api/times', timeRoutes);
+app.use('/api/health-responses', healthResponseRoutes);
+app.use('/api/room-logs', roomLogRoutes);
 
 const PORT = 8000;
 app.listen(PORT, () => {

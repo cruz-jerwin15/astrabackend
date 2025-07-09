@@ -20,6 +20,17 @@ exports.getResponseById = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+exports.getResponseByHealthId = async (req, res) => {
+  try {
+    const [rows] = await Response.getByHealthId(req.params.id);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Response not found" });
+    }
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
 
 exports.createResponse = async (req, res) => {
     try {

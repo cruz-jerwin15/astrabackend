@@ -8,6 +8,9 @@ const Response = {
   getById: (id) => {
     return db.query("SELECT * FROM tbl_responses WHERE id = ?", [id]);
   },
+  getByHealthId: (id) => {
+    return db.query("SELECT * FROM tbl_responses WHERE healtdec_id = ? ORDER BY id ASC", [id]);
+  },
 
   create: (data) => {
     const {

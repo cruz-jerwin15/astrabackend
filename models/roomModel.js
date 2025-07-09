@@ -23,7 +23,20 @@ const Room = {
           WHERE r.id = ?
         `, [id]);
       },
-      
+    getByRoomKey: (room_key) => {
+        return db.query(
+          `
+          SELECT 
+            r.*, 
+            b.building_name, 
+            b.description AS building_description 
+          FROM tbl_rooms r
+          JOIN tbl_buildings b ON r.building_id = b.id
+          WHERE r.room_key = ?
+          `,
+          [room_key]
+        );
+      },   
 
   getByRoomNameInBuilding: (building_id, room_name) => {
     return db.query('SELECT * FROM tbl_rooms WHERE building_id = ? AND room_name = ?', [building_id, room_name]);

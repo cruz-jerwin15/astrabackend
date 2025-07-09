@@ -8,6 +8,44 @@ exports.getAllHealth = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+exports.getHealthByUserId = async (req, res) => {
+  try {
+    const userId = req.params.user_id;
+    const [rows] = await Health.getByUserId(userId);
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+exports.getHealthByUserIdLast = async (req, res) => {
+  try {
+    const userId = req.params.user_id;
+    const [rows] = await Health.getByUserIdLast(userId);
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+exports.getHealthByUserAndForm = async (req, res) => {
+  try {
+    const { user_id, form_key } = req.query;
+
+    if (!user_id || !form_key) {
+      return res.status(400).json({ message: "user_id and form_key are required." });
+    }
+
+    const [rows] = await Health.getByUserAndForm(user_id, form_key);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "No health record found for given user_id and form_key." });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Error fetching health records by user and form:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 exports.getHealthById = async (req, res) => {
   try {

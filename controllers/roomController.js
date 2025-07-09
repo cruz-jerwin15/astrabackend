@@ -13,7 +13,26 @@ exports.getAllRooms = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+exports.getRoomByKey = async (req, res) => {
+  try {
+    const { room_key } = req.params;
 
+    if (!room_key) {
+      return res.status(400).json({ message: "room_key is required." });
+    }
+
+    const [rows] = await Room.getByRoomKey(room_key);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Room not found." });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Error fetching room by key:", err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
 exports.getRoomById = async (req, res) => {
   try {
     const [rows] = await Room.getById(req.params.id);

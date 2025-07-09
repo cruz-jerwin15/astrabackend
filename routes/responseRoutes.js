@@ -3,6 +3,7 @@ const router = express.Router();
 const responseController = require("../controllers/responseController");
 
 router.get("/", responseController.getAllResponses);
+router.get("/health-declaration/:id", responseController.getResponseByHealthId);
 router.get("/:id", responseController.getResponseById);
 router.post("/", responseController.createResponse);
 router.put("/:id", responseController.updateResponse);
