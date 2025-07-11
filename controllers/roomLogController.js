@@ -105,7 +105,7 @@ exports.createRoomLog = async (req, res) => {
       })
         .split('/')
         .reverse();
-      const log_date = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
+      const log_date = `${dateParts[0]}-${dateParts[2]}-${dateParts[1]}`;
       // const log_date = `${year}-${month}-${day}`;
       const log_in = now.toLocaleTimeString('en-PH', {
         timeZone: 'Asia/Manila',
