@@ -97,11 +97,24 @@ exports.createRoomLog = async (req, res) => {
 
       const log_key = generateFormKey()
       const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const log_date = `${year}-${month}-${day}`;
-            const log_in = now.toTimeString().split(" ")[0];
+      const dateParts = now.toLocaleDateString('en-PH', {
+        timeZone: 'Asia/Manila',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      })
+        .split('/')
+        .reverse();
+      const log_date = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
+      // const log_date = `${year}-${month}-${day}`;
+      const log_in = now.toLocaleTimeString('en-PH', {
+        timeZone: 'Asia/Manila',
+        hour12: false, // Use 24-hour format
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+           
   
       // Only check if status is WAITING
       if (status === 'WAITING') {

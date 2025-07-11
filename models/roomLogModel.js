@@ -71,7 +71,13 @@ const RoomLogModel = {
   },
   updateLogOutTime: async (user_id, room_key, log_date) => {
     const now = new Date();
-    const time = now.toTimeString().split(' ')[0]; // HH:mm:ss
+    const time = now.toLocaleTimeString('en-PH', {
+      timeZone: 'Asia/Manila',
+      hour12: false, // Use 24-hour format
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
     console.log('TIME',time)
     const status = 'ACTIVE';
     return db.query(
