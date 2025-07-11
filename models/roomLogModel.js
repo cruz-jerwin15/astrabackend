@@ -72,7 +72,7 @@ const RoomLogModel = {
   updateLogOutTime: async (user_id, room_key, log_date) => {
     const now = new Date();
     const time = now.toTimeString().split(' ')[0]; // HH:mm:ss
-    console.log(time)
+    console.log('TIME',time)
     const status = 'ACTIVE';
     return db.query(
       `UPDATE tbl_room_logs 
