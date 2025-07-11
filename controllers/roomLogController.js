@@ -115,7 +115,7 @@ exports.createRoomLog = async (req, res) => {
         second: '2-digit'
       });
            
-  
+      console.log('Log Date',log_date)
       // Only check if status is WAITING
       if (status === 'WAITING') {
         // Check if any WAITING log exists today
