@@ -22,8 +22,26 @@ const Health = {
   },
   create: (data) => {
     const { form_key, user_id, status } = data;
-    const date_added = new Date();
-    const timeString = date_added.toTimeString().split(' ')[0];
+    // const date_added = new Date();
+    // const timeString = date_added.toTimeString().split(' ')[0];
+    const now = new Date();
+    const dateParts = now.toLocaleDateString('en-PH', {
+      timeZone: 'Asia/Manila',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    })
+      .split('/')
+      .reverse();
+    const date_added = `${dateParts[0]}-${dateParts[2]}-${dateParts[1]}`;
+    // const log_date = `${year}-${month}-${day}`;
+    const timeString = now.toLocaleTimeString('en-PH', {
+      timeZone: 'Asia/Manila',
+      hour12: false, // Use 24-hour format
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
     console.log(timeString);
     return db.query(
       "INSERT INTO tbl_health (form_key, user_id, status, date_added,time) VALUES (?, ?, ?, ?, ?)",

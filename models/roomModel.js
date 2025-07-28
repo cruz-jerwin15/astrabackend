@@ -37,6 +37,7 @@ const Room = {
           [room_key]
         );
       },   
+    
 
   getByRoomNameInBuilding: (building_id, room_name) => {
     return db.query('SELECT * FROM tbl_rooms WHERE building_id = ? AND room_name = ?', [building_id, room_name]);

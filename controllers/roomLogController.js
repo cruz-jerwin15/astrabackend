@@ -84,7 +84,64 @@ exports.createRoomLog = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+exports.getAllLogsGroupedByDate = async (req, res) => {
+  try {
+    const userId = req.params.user_id;
+    const [results] = await RoomLog.getAllLogsGroupedByDate(userId);
 
+    const formatted = results.map(row => ({
+      log_date: row.log_date,
+      total_logs: row.total_logs,
+      info_logs: JSON.parse(row.info_logs)
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error('Error fetching grouped room logs:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+exports.getLogsGroupedByDate = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+
+    if (!user_id) {
+      return res.status(400).json({ message: "Missing user_id parameter." });
+    }
+
+    const [rows] = await RoomLog.getAllLogsByUser(user_id);
+
+    // Group by log_date
+    const grouped = {};
+
+    rows.forEach(row => {
+      const dateKey = row.log_date // "YYYY-MM-DD"
+      
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = {
+          log_date: row.log_date,
+          total_logs: 0,
+          info_logs: []
+        };
+      }
+      grouped[dateKey].total_logs += 1;
+      grouped[dateKey].info_logs.push({
+        room_key: row.room_key,
+        log_in: row.log_in,
+        log_out: row.log_out,
+        status: row.status
+      });
+    });
+
+    // Convert object to array
+    const result = Object.values(grouped);
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error fetching grouped room logs:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
 exports.createRoomLog = async (req, res) => {
     try {
       const {

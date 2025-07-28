@@ -5,6 +5,8 @@ const roomLogController = require("../controllers/roomLogController");
 // GET all logs
 router.get("/", roomLogController.getAllRoomLogs);
 
+router.get("/grouped/:user_id", roomLogController.getLogsGroupedByDate);
+
 router.get("/user-date", roomLogController.getRoomLogsByUserAndDate);
 
 router.get('/by-user-date', roomLogController.getLogsByUserAndDate);
@@ -13,7 +15,7 @@ router.put("/update-logout", roomLogController.updateLogOutTime);
 
 // router.put('/logout/:id', roomLogController.updateLogOutTime);
 
-
+router.get('/grouped-logs/:user_id', roomLogController.getAllLogsGroupedByDate);
 
 // GET by id
 router.get("/:id", roomLogController.getRoomLogById);

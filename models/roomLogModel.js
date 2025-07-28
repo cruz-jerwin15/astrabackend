@@ -87,6 +87,67 @@ const RoomLogModel = {
       [time, status, user_id, room_key, log_date]
     );
   },
+  getByUserGroupedByDate: (user_id) => {
+    return db.query(
+      `
+      SELECT 
+        log_date,
+        COUNT(*) AS total_logs
+      FROM tbl_room_logs
+      WHERE user_id = ?
+      GROUP BY log_date
+      ORDER BY log_date DESC
+      `,
+      [user_id]
+    );
+  },
+  getAllLogsGroupedByDate: (user_id) => {
+    return db.query(
+      `
+      SELECT 
+  DATE(room_logs.log_date) AS log_date,
+  COUNT(*) AS total_logs,
+  CONCAT(
+    '[', GROUP_CONCAT(
+      CONCAT(
+        '{',
+        '"room_key":"', room_logs.room_key, '",',
+        '"log_in":"', TIME_FORMAT(room_logs.log_in, '%H:%i:%s'), '",',
+        '"log_out":"', TIME_FORMAT(room_logs.log_out, '%H:%i:%s'), '",',
+        '"status":"', room_logs.status, '",',
+        '"room_name":"', rooms.room_name, '",',
+        '"building_name":"', buildings.building_name, '"',
+        '}'
+      )
+      SEPARATOR ','
+    ), ']'
+  ) AS info_logs
+FROM tbl_room_logs AS room_logs
+JOIN tbl_rooms AS rooms ON room_logs.room_key = rooms.room_key
+JOIN tbl_buildings AS buildings ON rooms.building_id = buildings.id
+GROUP BY DATE(room_logs.log_date)
+ORDER BY log_date DESC;
+      `,
+      [user_id]
+      
+    );
+  },
+  getAllLogsByUser: (user_id) => {
+    return db.query(
+      `
+      SELECT 
+        log_date,
+        room_key,
+        log_in,
+        log_out,
+        status
+      FROM tbl_room_logs
+      WHERE user_id = ?
+      ORDER BY log_date DESC, id DESC
+      `,
+      [user_id]
+    );
+  },
   create: (data) => {
     const {
       log_key,
