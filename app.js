@@ -37,7 +37,8 @@ app.use('/api/times', timeRoutes);
 app.use('/api/health-responses', healthResponseRoutes);
 app.use('/api/room-logs', roomLogRoutes);
 
-const PORT = process.env.DB_PORT;
+// const PORT = process.env.DB_PORT;
+const PORT = process.env.MYSQLPORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
